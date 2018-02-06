@@ -35,45 +35,58 @@ def flags(flag, base, target):
 
 
 def is_extension(ext, f_name):
-    check_at = f_name.find(ext) + len(ext)
-    try:
+    check_at = f_name.find(ext) + len(ext)  # this basically finds what should be the character after the
+    try:                                        # the extension if it's correct; if it's not correct it errors
         f_name[check_at]  # this checks that there are no characters at the end of where the extension should be
         return False
     except IndexError:  # if the extension is actually the last piece, there will be an index error
         return True
 
 
+# this function moves the files listed in no_ext into the /unsorted directory
+def group_unsorted(no_ext, target):
+    error = []
+    for f in no_ext:
+        try:
+            copy2(f, target + '/unsorted')
+            print(f)
+        except:
+            error.append(f)
+    return error
+
+
 def main(base, target):
-    not_sortable = True
+    # not_sortable = True
+    MAX_EXT_LEN = 5  # this is just an intelligent guess for a max length of extensions. Change at will/need
+    # walk the base to learn extensions and create the directories to house them
     for subdir, dirs, files in os.walk(base):
         for file_name in files:
+            not_sortable = True  # check if each file is sortable
             for c in range(len(file_name)):
                 if file_name[c] == '.':
-                    if file_name[c:] in extensions:
+                    if file_name[c:].lower() in extensions:
                         pass
-                    elif len(file_name[c:]) <= 5:
-                        extensions.append(file_name[c:])
-                        os.mkdir(target + '/' + file_name[c + 1:])
-                        print(file_name[c:])
-                        not_sortable = False
+                    elif len(file_name[c:]) <= MAX_EXT_LEN:
+                        extensions.append(file_name[c:].lower())
+                        os.mkdir(target + '/' + file_name[c + 1:].lower())  # +1 so that the directory isn't a dotfile
+                        print(file_name[c:].lower())
+                        not_sortable = False  # this file WAS sorted
             if not_sortable:
                 unsorted.append(subdir + '/' + file_name)
 
     for subdir, dirs, files in os.walk(base):
         for file_name in files:
-            for i in extensions:
-                if i in file_name:
-                    if is_extension(i, file_name):
-                        print(subdir + '/' + file_name)
-                        copy2(subdir + '/' + file_name, target + '/' + i[1:])
+            if subdir + '/' + file_name in unsorted:  # don't do all the other stuff if the file has been determined
+                pass                                    # to not have a sortable extension
+            else:
+                for i in extensions:  # check every extension in the file_name until success
+                    if i in file_name:
+                        if is_extension(i, file_name):
+                            print(subdir + '/' + file_name)
+                            copy2(subdir + '/' + file_name, target + '/' + i[1:])
+                            break  # break one level -- we can stop checking extensions after success of is_extension
 
-    error_out = []
-    for f in unsorted:
-        try:
-            copy2(f, target + '/unsorted')
-            print(f)
-        except:
-            error_out.append(f)
+    error_out = group_unsorted(unsorted, target)  # attempt to move unsorted
 
     if len(error_out) > 0:
         print('Error on:')
