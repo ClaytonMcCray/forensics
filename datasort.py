@@ -35,8 +35,8 @@ def read_input():
 def flags(flag, base, target):
     HELP = 'datasort ' + str(Version) + \
            '\nAuthor: ' + Author + '' \
-           '\ndatasort [-e][-h] /path/to/base /path/to/target' \
-           '\n\nNote that flags should be compounded, i.e. -he instead of -h -e' \
+           '\ndatasort [-option] /path/to/base /path/to/target' \
+           '\n\nNote that flags should be compounded, i.e. -tb instead of -t -b' \
            '\n-e\t\tTarget file \'e\'xists; do not overwrite (default is to overwrite target)' \
            '\n-b\t\tBase path is abbreviated; it begins in the pwd. Do not lead with / if in pwd' \
            '\n-t\t\tTarget path is abbreviated; it beings in the pwd. Do not lead with / if in pwd' \
