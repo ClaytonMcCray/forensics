@@ -11,24 +11,27 @@ import sys
 ###############################################################################################
 
 extensions = []
-# not_sortable = True
 unsorted = []
 
 
 def read_input():
     if sys.argv[1][0] == '-':
-        flags(sys.argv[1], sys.argv[2], sys.argv[3])
+        base, target = flags(sys.argv[1], sys.argv[2], sys.argv[3])
     else:
         base = sys.argv[1]
         target = sys.argv[2]
         os.mkdir(target)
-        os.mkdir(target + '/unsorted')  # files without clear extension
-        main(base, target)
+
+    os.mkdir(target + '/unsorted')  # files without clear extension
+    main(base, target)
 
 
 # This will handle flags passed in
 def flags(flag, base, target):
-    pass
+    if 'e' in flag:  # -e for 'exists'
+        if target[len(target)-1] == '/':
+            target = target[:len(target)-1]  # this will strip / if the user includes it for the directory
+        return base, target
 
 
 def is_extension(ext, f_name):
@@ -72,8 +75,9 @@ def main(base, target):
         except:
             error_out.append(f)
 
-    print('Error on:')
-    print(error_out)
+    if len(error_out) > 0:
+        print('Error on:')
+        print(error_out)
     input('Press Enter to quit')
 
 
