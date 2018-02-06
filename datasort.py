@@ -5,9 +5,6 @@ import sys
 
 ###############################################################################################
 # TODO:
-# Moved large chunk of program to main(), hasn't been tested.
-# Need to enter some flags. First one will be -e for 'file exists' for the target directory
-# Maybe should break up the main() into smaller pieces
 ###############################################################################################
 
 extensions = []
