@@ -8,6 +8,9 @@ import sys
 
 ###############################################################################################
 # TODO:
+# Add a flag for interaction i.e. confirm every copy
+# Add a flag to exclude some extensions
+# Add a flag to ask what to do on particular extensions
 ###############################################################################################
 
 extensions = []
