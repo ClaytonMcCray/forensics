@@ -37,12 +37,13 @@ def flags(flag, base, target):
            '\n\nNote that flags should be compounded, i.e. -he instead of -h -e' \
            '\n-e\t\tTarget file \'e\'xists; do not overwrite (default is to overwrite target)' \
            '\n-h\t\tDisplay this menu'
+
+    if 'h' in flag:
+        print(HELP)
     if 'e' in flag:  # -e for 'exists'
         if target[len(target)-1] == '/':
             target = target[:len(target)-1]  # this will strip / if the user includes it for the directory
         return base, target
-    if 'h' in flag:
-        print(HELP)
 
 
 
