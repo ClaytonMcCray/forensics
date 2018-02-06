@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# Author: Clayton McCray
+# Version: 2.0
+
 import os
 from shutil import copy2
 import sys
