@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 Author = 'Clayton McCray'
-Version = 2.0
+Version = 2.1
 
 import os
 from shutil import copy2
@@ -22,9 +22,11 @@ def read_input():
             base = sys.argv[1]
             target = sys.argv[2]
             os.mkdir(target)
-
-        os.mkdir(target + '/unsorted')  # files without clear extension
-        main(base, target)
+        try:
+            os.mkdir(target + '/unsorted')  # files without clear extension
+            main(base, target)
+        except FileExistsError:
+            print('Error! Does the target exist? Try [-e].')
     except IndexError:
         flags('-h', '', '')
 
@@ -36,14 +38,20 @@ def flags(flag, base, target):
            '\ndatasort [-e][-h] /path/to/base /path/to/target' \
            '\n\nNote that flags should be compounded, i.e. -he instead of -h -e' \
            '\n-e\t\tTarget file \'e\'xists; do not overwrite (default is to overwrite target)' \
+           '\n-b\t\tBase path is abbreviated; it begins in the pwd. Do not lead with / if in pwd' \
+           '\n-t\t\tTarget path is abbreviated; it beings in the pwd. Do not lead with / if in pwd' \
            '\n-h\t\tDisplay this menu'
 
     if 'h' in flag:
         print(HELP)
+    if 'b' in flag:
+        base = os.getcwd() + '/' + base
+    if 't' in flag:
+        target = os.getcwd() + '/' + target
     if 'e' in flag:  # -e for 'exists'
         if target[len(target)-1] == '/':
             target = target[:len(target)-1]  # this will strip / if the user includes it for the directory
-        return base, target
+    return base, target
 
 
 
@@ -105,6 +113,5 @@ def main(base, target):
         print('Error on:')
         print(error_out)
     input('Press Enter to quit')
-
 
 read_input()
