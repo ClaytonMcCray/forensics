@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# Author: Clayton McCray
-# Version: 2.0
+Author = 'Clayton McCray'
+Version = 2.0
 
 import os
 from shutil import copy2
@@ -15,23 +15,35 @@ unsorted = []
 
 
 def read_input():
-    if sys.argv[1][0] == '-':
-        base, target = flags(sys.argv[1], sys.argv[2], sys.argv[3])
-    else:
-        base = sys.argv[1]
-        target = sys.argv[2]
-        os.mkdir(target)
+    try:
+        if sys.argv[1][0] == '-':
+            base, target = flags(sys.argv[1], sys.argv[2], sys.argv[3])
+        else:
+            base = sys.argv[1]
+            target = sys.argv[2]
+            os.mkdir(target)
 
-    os.mkdir(target + '/unsorted')  # files without clear extension
-    main(base, target)
+        os.mkdir(target + '/unsorted')  # files without clear extension
+        main(base, target)
+    except IndexError:
+        flags('-h', '', '')
 
 
 # This will handle flags passed in
 def flags(flag, base, target):
+    HELP = 'datasort ' + str(Version) + \
+           '\nAuthor: ' + Author + '' \
+           '\ndatasort [-e][-h] /path/to/base /path/to/target' \
+           '\n\nNote that flags should be compounded, i.e. -he instead of -h -e' \
+           '\n-e\t\tTarget file \'e\'xists; do not overwrite (default is to overwrite target)' \
+           '\n-h\t\tDisplay this menu'
     if 'e' in flag:  # -e for 'exists'
         if target[len(target)-1] == '/':
             target = target[:len(target)-1]  # this will strip / if the user includes it for the directory
         return base, target
+    if 'h' in flag:
+        print(HELP)
+
 
 
 def is_extension(ext, f_name):
