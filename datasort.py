@@ -57,15 +57,15 @@ def group_unsorted(no_ext, target):
 
 def main(base, target):
     # not_sortable = True
-    MAX_EXT_LEN = 5  # this is just an intelligent guess for a max length of extensions. Change at will/need
+    MAX_EXT_LEN = 6  # this is just an intelligent guess for a max length of extensions. Change at will/need
     # walk the base to learn extensions and create the directories to house them
     for subdir, dirs, files in os.walk(base):
         for file_name in files:
-            not_sortable = True  # check if each file is sortable
+            not_sortable = True  # check if each file is sortable # causes a problem with everything going to unsorted
             for c in range(len(file_name)):
                 if file_name[c] == '.':
                     if file_name[c:].lower() in extensions:
-                        pass
+                        not_sortable = False
                     elif len(file_name[c:]) <= MAX_EXT_LEN:
                         extensions.append(file_name[c:].lower())
                         os.mkdir(target + '/' + file_name[c + 1:].lower())  # +1 so that the directory isn't a dotfile
