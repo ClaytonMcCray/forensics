@@ -54,7 +54,7 @@ def flags(flag, base, target):
     if 'e' in flag:  # -e for 'exists'
         if target[len(target)-1] == '/':
             target = target[:len(target)-1]  # this will strip / if the user includes it for the directory
-    else:
+    elif 'h' not in flag:
         os.mkdir(target)
     return base, target
 
