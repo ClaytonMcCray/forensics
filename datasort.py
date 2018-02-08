@@ -8,6 +8,8 @@ import sys
 
 ###############################################################################################
 # TODO:
+# URGENT:
+#   See TODO in flags()
 # Add a flag for interaction i.e. confirm every copy
 # Add a flag to exclude some extensions
 # Add a flag to ask what to do on particular extensions
@@ -44,9 +46,10 @@ def flags(flag, base, target):
            '\n-b\t\tBase path is abbreviated; it begins in the pwd. Do not lead with / if in pwd' \
            '\n-t\t\tTarget path is abbreviated; it beings in the pwd. Do not lead with / if in pwd' \
            '\n-h\t\tDisplay this menu'
-
+    BUGS = '\n\nKnown bugs include:\n\n' \
+           '1. Currently, datasort will break if called with a `-h` flag AND a nonexistent target directory.'
     if 'h' in flag:
-        print(HELP)
+        print(HELP + BUGS)
     if 'b' in flag:
         base = os.getcwd() + '/' + base
     if 't' in flag:
@@ -54,10 +57,15 @@ def flags(flag, base, target):
     if 'e' in flag:  # -e for 'exists'
         if target[len(target)-1] == '/':
             target = target[:len(target)-1]  # this will strip / if the user includes it for the directory
+    # TODO
+    # This won't work permanently! consider the case `datasort -tbh path/to/base path/to/target`
+    # In this instance, the code will not function properly; it should assume that path/to/target does not exist,
+    # but because there is an `h` flag, it will skip the below os.mkdir(). It only works if `-h` is not included
+    # on a call meant to actually sort data, or if the target directory already exists. i.e. it is broken in the case
+    # that one calls datasort with the `-h` flag, intending to sort data into a nonexistent target.
     elif 'h' not in flag:
         os.mkdir(target)
     return base, target
-
 
 
 def is_extension(ext, f_name):
